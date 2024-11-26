@@ -53,17 +53,23 @@ const Signup = () => {
 
         try {
             dispatch(setLoading(true));
+            console.log('Sending registration request to:', `${USER_API_END_POINT}/register`);
             const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
-                headers: { 'Content-Type': "multipart/form-data" },
+                headers: { 
+                    'Content-Type': "multipart/form-data",
+                },
                 withCredentials: true,
             });
+            console.log('Registration response:', res.data);
             if (res.data.success) {
                 navigate("/login");
                 toast.success(res.data.message);
             }
         } catch (error) {
             console.error('Signup error:', error);
-            toast.error(error.response?.data?.message || "Registration failed. Please try again.");
+            const errorMessage = error.response?.data?.message || "Registration failed. Please try again.";
+            console.error('Error details:', errorMessage);
+            toast.error(errorMessage);
         } finally {
             dispatch(setLoading(false));
         }
