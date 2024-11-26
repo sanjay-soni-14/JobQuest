@@ -1,12 +1,12 @@
 {
-  "name": "jobportal",
+  "name": "jobquest",
   "version": "1.0.0",
+  "description": "Job Portal Application",
   "scripts": {
-    "frontend": "cd frontend && npm run dev",
-    "backend": "cd backend && npm run dev",
-    "dev": "concurrently \"npm run frontend\" \"npm run backend\""
+    "start": "cd backend && npm install && node index.js",
+    "build": "cd backend && npm install"
   },
-  "devDependencies": {
-    "concurrently": "^9.1.0"
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
