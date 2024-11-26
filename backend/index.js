@@ -7,11 +7,6 @@ import userRoute from "./routes/user.route.js";
 import companyRoute from "./routes/company.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 dotenv.config({
     path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env'
@@ -35,15 +30,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// For production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('public'));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-    });
-}
-
-// api's
+// api routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
@@ -51,7 +38,20 @@ app.use("/api/v1/application", applicationRoute);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok' });
+    res.status(200).json({ 
+        status: 'ok',
+        environment: process.env.NODE_ENV,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        message: 'JobQuest API Server',
+        version: '1.0.0',
+        status: 'running'
+    });
 });
 
 const PORT = process.env.PORT || 8000;
