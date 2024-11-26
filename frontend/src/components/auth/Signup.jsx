@@ -34,7 +34,14 @@ const Signup = () => {
     }
     const submitHandler = async (e) => {
         e.preventDefault();
-        const formData = new FormData();    //formdata object
+        
+        // Validate required fields
+        if (!input.fullname || !input.email || !input.phoneNumber || !input.password || !input.role) {
+            toast.error("Please fill in all required fields");
+            return;
+        }
+
+        const formData = new FormData();
         formData.append("fullname", input.fullname);
         formData.append("email", input.email);
         formData.append("phoneNumber", input.phoneNumber);
@@ -55,9 +62,9 @@ const Signup = () => {
                 toast.success(res.data.message);
             }
         } catch (error) {
-            console.log(error);
-            toast.error(error.response.data.message);
-        } finally{
+            console.error('Signup error:', error);
+            toast.error(error.response?.data?.message || "Registration failed. Please try again.");
+        } finally {
             dispatch(setLoading(false));
         }
     }
