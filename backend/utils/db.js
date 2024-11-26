@@ -2,16 +2,16 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
     try {
+        mongoose.set('strictQuery', false);
         const conn = await mongoose.connect(process.env.MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            retryWrites: true,
-            w: 'majority'
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000,
         });
         
         console.log(`MongoDB Connected: ${conn.connection.host}`);
         
-        // Handle connection errors after initial connection
         mongoose.connection.on('error', (err) => {
             console.error('MongoDB connection error:', err);
         });
@@ -25,8 +25,9 @@ const connectDB = async () => {
         });
 
     } catch (error) {
-        console.error('Error connecting to MongoDB:', error);
-        throw error; // Propagate error to server startup
+        console.error('Error connecting to MongoDB:', error.message);
+        console.error('Full error:', error);
+        process.exit(1);
     }
 }
 
