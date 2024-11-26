@@ -1,4 +1,4 @@
 #!/bin/bash
 cd /opt/render/project/src
 npm install
-npm start
+node index.js
